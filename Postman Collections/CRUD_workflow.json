@@ -64,7 +64,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{token}}",
+						"value": "{{tokenid}}",
 						"type": "text"
 					}
 				],
@@ -118,7 +118,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{token}}",
+						"value": "{{tokenid}}",
 						"type": "text"
 					}
 				],
@@ -160,7 +160,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{token}}",
+						"value": "{{tokenid}}",
 						"type": "text"
 					}
 				],
@@ -200,7 +200,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{token}}",
+						"value": "{{tokenid}}",
 						"type": "text"
 					}
 				],
@@ -233,7 +233,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "{{token}}",
+						"value": "{{tokenid}}",
 						"type": "text"
 					}
 				],
