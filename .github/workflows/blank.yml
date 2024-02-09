@@ -1,44 +1,17 @@
-name: Test-Build
-on:
-  push:
-    branches:
-      - main
+name: Automated API tests using Postman CLI
+
+on: push
+
 jobs:
-  test-api:
+  automated-api-tests:
     runs-on: ubuntu-latest
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-
-      # INstall Node on the runner
-      - name: Install Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: "16.x"
-
-
-      # Install the newman command line utility and also install the html extra reporter
-      - name: Install newman
+      - uses: actions/checkout@v3
+      - name: Install Postman CLI
         run: |
-          npm install -g newman
-          npm install -g newman-reporter-htmlextra
-
-
-      # Make directory to upload the test results
-      - name: Make Directory for results
-        run: mkdir -p testResults
-
-
-      # Run the POSTMAN collection
-      - name: Run POSTMAN collection
+          curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+      - name: Login to Postman CLI
+        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+      - name: Run API tests
         run: |
-          newman run CRUD_workflow.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
-
-
-      # Upload the contents of Test Results directory to workspace
-      - name: Output the run Details
-        uses: actions/upload-artifact@v2
-        with:
-          name: RunReports
-          path: testResults 
+          postman collection run "31816131-ab428970-b970-4020-8982-bd7412cd068a" -e "31816131-235e4565-6c5e-412e-bba3-c07a18c4b08d"
