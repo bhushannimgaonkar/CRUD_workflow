@@ -1,0 +1,310 @@
+{
+	"info": {
+		"_postman_id": "ab428970-b970-4020-8982-bd7412cd068a",
+		"name": "CRUD workflow",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create a User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2161a32f-60c6-41fc-8f1b-afa78e93af0e",
+						"exec": [
+							"const resJSON=pm.response.json();\r",
+							"\r",
+							"const userID=resJSON.id;\r",
+							"\r",
+							"console.log(userID);\r",
+							"\r",
+							"pm.variables.set(\"userID\",userID);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"//get the request body\r",
+							"\r",
+							"const reqJSON=JSON.parse(pm.request.body)\r",
+							"\r",
+							"const name=reqJSON.name;\r",
+							"const email = reqJSON.email;\r",
+							"//const name=reqJSON.name;\r",
+							"pm.variables.set(\"name\",name);\r",
+							"pm.variables.set(\"email\",email);\r",
+							"\r",
+							"console.log(\"Name :====>\"+name);\r",
+							"console.log(\"Email:====>\"+email);\r",
+							"\r",
+							"pm.test(\"response should have name\", function () {\r",
+							"    \r",
+							"    pm.expect(resJSON.name).to.eql(reqJSON.name);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"response should have email\", function () {\r",
+							"    \r",
+							"    pm.expect(resJSON.email).to.eql(reqJSON.email);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "9bf9c67f-acb5-4cc8-b993-4b1634280266",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"email\" : \"{{$randomEmail}}\",\r\n\"name\" : \"{{$randomFullName}}\",\r\n\"gender\" : \"female\",\r\n\"status\" : \"active\"\r\n\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseUrl}}/public/v2/users"
+			},
+			"response": []
+		},
+		{
+			"name": "Get  the user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a72c3b4c-660d-43c5-9831-c734df8315b7",
+						"exec": [
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"check name in the response\", function () {\r",
+							"\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.eql(pm.variables.get(\"name\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"check email in the response\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.email).to.eql(pm.variables.get(\"email\"));\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "21c80c7d-cd0d-4532-819b-2e24e84d36b1",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": "{{baseUrl}}/public/v2/users/{{userID}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Update a user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cac1637f-ff36-4966-a48a-f19ee497e375",
+						"exec": [
+							"\r",
+							"\r",
+							"\r",
+							"const requestBody=JSON.parse(pm.request.body)\r",
+							"const status=requestBody.status;\r",
+							"console.log(\"PUT request staus in the body:====>\"+status);\r",
+							"\r",
+							"pm.test(\"status changed correctly\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.status).to.eql(status);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "17c414ae-87cd-4cdf-a217-b938c2e66cc1",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"status\" : \"inactive\"  \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{baseUrl}}/public/v2/users/{{userID}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete the user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7a20e48c-da83-497a-904d-d64abefb62c5",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "3f294236-aded-4596-9e0c-fcbefc9dff97",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": "{{baseUrl}}/public/v2/users\\{{userID}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Get the user again",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9ffa69a1-cf62-41b6-a2a2-4a48822e5f08",
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "d9d6b2e8-9bf2-4110-8be3-df7569b4164c",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": "{{baseUrl}}/public/v2/users/{{userID}}"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "9ed4592d-982f-4ff9-9d35-511a7a235a24",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "b02aeb4c-8767-48ec-b157-03a4a8622256",
+				"type": "text/javascript",
+				"exec": [
+					"if(pm.request.method=='GET' && pm.info.requestName!='Get the user again'){",
+					"",
+					"    console.log(\"========in GET call for====> \"+pm.info.requestName);",
+					"",
+					"    pm.test(\"Status code is 200\", function () {",
+					"        pm.response.to.have.status(200);",
+					"    });",
+					"}",
+					"",
+					"",
+					"if(pm.request.method=='POST'){",
+					"",
+					"    console.log(\"========in POST call for====> \"+pm.info.requestName);",
+					"    pm.test(\"Status code is 201\", function () {",
+					"        pm.response.to.have.status(201);",
+					"    });",
+					"",
+					"}",
+					"",
+					"if(pm.request.method=='PUT'){",
+					"",
+					"    console.log(\"========in PUT call for====> \"+pm.info.requestName);",
+					"    pm.test(\"Status code is 200\", function () {",
+					"        pm.response.to.have.status(200);",
+					"    });",
+					"}",
+					"",
+					"",
+					"if(pm.request.method=='PATCH'){",
+					"",
+					"    console.log(\"========in PATCH call for====> \"+pm.info.requestName);",
+					"    pm.test(\"Status code is 200\", function () {",
+					"        pm.response.to.have.status(200);",
+					"    });",
+					"}",
+					"",
+					"if(pm.request.method=='DELETE'){",
+					"",
+					"    console.log(\"========in DELETE call for====> \"+pm.info.requestName);",
+					"    pm.test(\"Status code is 204\", function () {",
+					"        pm.response.to.have.status(204);",
+					"    });",
+					"}",
+					""
+				]
+			}
+		}
+	]
+}
